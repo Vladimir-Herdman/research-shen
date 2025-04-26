@@ -1,0 +1,6 @@
+.DS_Store
+*.sh
+images/
+automated_run/
+__pycache__/
+Thumbs.db
