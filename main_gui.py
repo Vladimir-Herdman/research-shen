@@ -156,7 +156,7 @@ class MyLoadingFrame(customtkinter.CTkFrame):
             self.loading_dots += "."
 
             time.sleep(0.5)
-
+    
 class App(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -167,16 +167,6 @@ class App(customtkinter.CTk):
         self.geometry("1400x460")
         self.grid_columnconfigure([0, 1, 3], weight=1)
         self.grid_rowconfigure(0, weight=1)
-
-        #self.brightness = MyDoubleRadiobuttonFrame(self, "Brightness values", 
-        #    leftvalues=["40", "50", "60", "70"], 
-        #    rightvalues=["20", "30", "40", "50"], 
-        #    custom=True)
-        #self.brightness.grid(row=2, column=0, padx=(0, 10), pady=(10, 0), sticky="nesw", columnspan=overall_colspan)
-
-        #self.test_name = MyRadiobuttonFrame(self, "Test Name", 
-        #    values=["Artificial Brightness", "Physical Brightness", "Camera Angle", "Distance", "Background", "Custom"])
-        #self.test_name.grid(row=1, column=0, padx=(0, 10), pady=(10, 0), sticky="nesw", columnspan=overall_colspan)
 
         self.preview_cameras = MyCamerasPreviewFrame(self, "Preview Cameras")
         self.preview_cameras.grid(row = 3, column=3, padx=(0, 10), pady=(10, 0), sticky="nesw", columnspan=overall_colspan, rowspan=4)
@@ -223,14 +213,18 @@ class App(customtkinter.CTk):
         except Exception:
             pass
 
-        if(self.cam1.cap.isOpened() and self.cam2.cap.isOpened() and self.cam3.cap.isOpened() and self.cam4.cap.isOpened()):
-            self.loading_cams_frame.loading = False
-            self.loading_cams_frame.title.configure(fg_color="#33cc33", text="Connected")
-            time.sleep(1)
-            self.preview_cameras_func()
-        else:
-            self.loading_cams_frame.loading = False
-            self.loading_cams_frame.title.configure(fg_color="#c23427", text="Failure connecting to cameras")
+        # Start a thread here to check for when cameras done connecting or not
+        threading.Thread(target=self.check_for_connection, daemon=True).start()
+
+    def check_for_connection(self):
+        while True:
+            if(self.cam1.cap.isOpened() and self.cam2.cap.isOpened() and self.cam3.cap.isOpened() and self.cam4.cap.isOpened()):
+                self.loading_cams_frame.loading = False
+                self.loading_cams_frame.title.configure(fg_color="#33cc33", text="Connected")
+                time.sleep(1)
+                self.preview_cameras_func()
+                break
+            time.sleep(0.5)
 
     def run_button_func(self):
         try:
