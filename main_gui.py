@@ -60,73 +60,6 @@ class MyTitleShowerFrame(customtkinter.CTkFrame):
         self.file_name.configure(text=name)
         self.save_location.configure(text=f"{Cameras.images_dir}/{name}")
 
-#@deprecated("No longer in use, just an example to how to use customtkinter inheritance")
-#class MyRadiobuttonFrame(customtkinter.CTkFrame):
-#    def __init__(self, master, title, values):
-#        super().__init__(master)
-#        self.grid_columnconfigure(0, weight=1)
-#        self.values = values
-#        self.title = title
-#        self.radiobuttons = []
-#        self.variable = customtkinter.StringVar(value="Custom")
-#
-#        self.title = customtkinter.CTkLabel(self, text=self.title, fg_color="gray70", corner_radius=6)
-#        self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="ew")
-#
-#        for i, value in enumerate(self.values):
-#            radiobutton = customtkinter.CTkRadioButton(self, text=value, value=value, variable=self.variable)
-#            radiobutton.grid(row=i + 1, column=0, padx=10, pady=10, sticky="w")
-#            self.radiobuttons.append(radiobutton)
-#
-#    def get(self):
-#        return self.variable.get()
-
-#@deprecated("No longer in use, just an example to how to use customtkinter inheritance")
-#class MyDoubleRadiobuttonFrame(customtkinter.CTkFrame):
-#    def __init__(self, master, title, leftvalues, rightvalues, custom: bool):
-#        super().__init__(master)
-#        self.grid_columnconfigure(0, weight=1)
-#        self.custom = custom
-#        if not custom:
-#            self.leftvalues = leftvalues
-#            self.rightvalues = rightvalues
-#            self.title = title
-#            self.leftradiobuttons = []
-#            self.rightradiobuttons = []
-#            self.leftvariable = customtkinter.StringVar(value="")
-#            self.rightvariable = customtkinter.StringVar(value="")
-#
-#            self.title = customtkinter.CTkLabel(self, text=self.title, fg_color="gray70", corner_radius=6)
-#            self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="ew", columnspan=2)
-#
-#            for i, value in enumerate(self.leftvalues):
-#                radiobutton = customtkinter.CTkRadioButton(self, text=value, value=value, variable=self.leftvariable)
-#                radiobutton.grid(row=i + 1, column=0, padx=10, pady=10, sticky="w")
-#                self.leftradiobuttons.append(radiobutton)
-#
-#            for i, value in enumerate(self.rightvalues):
-#                radiobutton = customtkinter.CTkRadioButton(self, text=value, value=value, variable=self.rightvariable)
-#                radiobutton.grid(row=i + 1, column=1, padx=(10, 200), pady=10, sticky="w")
-#                self.rightradiobuttons.append(radiobutton)
-#        else:
-#            self.title = title
-#            self.title = customtkinter.CTkLabel(self, text=self.title, fg_color="gray70", corner_radius=6)
-#            self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="ew", columnspan=2)
-#            self.variable_one = customtkinter.StringVar(value="Brightness one")
-#            self.variable_two = customtkinter.StringVar(value="Brightness two")
-#
-#            self.entry_one = customtkinter.CTkEntry(self, height=28, placeholder_text="Brightness one", textvariable=self.variable_one)
-#            self.entry_one.grid(row=1, column=0, padx=(20, 10), pady=10, sticky='w')
-#
-#            self.entry_two = customtkinter.CTkEntry(self, height=28, placeholder_text="Brightness two", textvariable=self.variable_two)
-#            self.entry_two.grid(row=1, column=1, padx=(20, 10), pady=10, sticky='w')
-#
-#    def get(self) -> list[str]:
-#        if not self.custom:
-#            return str((self.leftvariable.get(), self.rightvariable.get()))
-#        else:
-#            return [self.variable_one.get(), self.variable_two.get()]
-
 class MyEntryFrame(customtkinter.CTkFrame):
     def __init__(self, master, title):
         super().__init__(master)
@@ -209,7 +142,6 @@ class MyLoadingFrame(customtkinter.CTkFrame):
         self.title.grid(row=0, column=0, padx=10, pady=(10, 0), sticky="nesw", columnspan=2)
 
         threading.Thread(target=self.update_loading, daemon=True).start()
-        #self.after_idle(lambda: threading.Thread(target=self.connect_cams, daemon=True).start())
 
     def set(self, new_text: str):
         self.title.configure(text=new_text)
@@ -278,7 +210,6 @@ class App(customtkinter.CTk):
         self.after_idle(lambda: threading.Thread(target=self.connect_cams, daemon=True).start())
 
     def change_save_name(self, *args):
-        #self.show_title.set_name(test_name=self.test_name.get(), brightness_values=self.brightness.get(), extra_entry=self.extra_entry.get())
         self.show_title.set_name(extra_entry=self.extra_entry.get())
 
     def connect_cams(self):
