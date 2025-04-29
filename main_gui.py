@@ -282,7 +282,7 @@ class App(customtkinter.CTk):
 
     def connect_cams(self):
         try:
-            self.cam1 = Cameras("Camera1", 1) #TODO: replace with proper numbers
+            self.cam1 = Cameras("Camera1", 2) #TODO: replace with proper numbers
             #self.cam2 = Cameras("Camera2", 2) #
             #self.cam3 = Cameras("Camera3", 3) #
             #self.cam4 = Cameras("Camera4", 4) #
@@ -301,8 +301,10 @@ class App(customtkinter.CTk):
             self.loading_cams_frame.title.configure(fg_color="#c23427", text="Failure connecting to cameras")
 
     def run_button_func(self):
+        distance = 3460
+        step_by = 64
         try:
-            for x in range(0, 3460, 64):
+            for x in range(0, distance, step_by):
                 #take picture
                 if (os.name != "posix"): #REMOVE: here for mac testing
                     subprocess.run(["ticcmd", "--position-relative", f"{x}", "--resume"])
@@ -312,6 +314,20 @@ class App(customtkinter.CTk):
                     #self.cam3.takePicture()
                     #self.cam4.takePicture()
                 print(f"Position: {x}")
+        except Exception as e:
+            print(e)
+        # Send back to start
+        try:
+            for x in range(0, distance, step_by):
+                #take picture
+                if (os.name != "posix"): #REMOVE: here for mac testing
+                    subprocess.run(["ticcmd", "--position-relative", f"{-x}", "--resume"])
+                if x >= 201:
+                    self.cam1.takePicture()
+                    #self.cam2.takePicture()
+                    #self.cam3.takePicture()
+                    #self.cam4.takePicture()
+                print(f"Position: {-x}")
         except Exception as e:
             print(e)
 
